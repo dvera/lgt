@@ -3,7 +3,7 @@ show the Latest Github repos with the most stars that you haven't seen before wi
 
 ---
 
-# WHY?
+# Why?
 
 I was tired of going through hundreds of repos on github.com/trending to find new repos I haven't seen before. This script makes GitHub API calls to get repos with the most stars, and makes a plain-text archive of repos you've seen so you don't see them again.
 
