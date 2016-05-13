@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-archive=${HOME}/.ghtdb
-tmpfile="/tmp/${USER}_latest_ght"
+archive=${HOME}/.lgtdb
+tmpfile="/tmp/.${USER}.lgt"
 
 languages="
 makefile
@@ -21,19 +21,20 @@ rust
 shell
 "
 
-rm -f new.gt
+rm -f $archive
+
+touch $archive
 
 for i in $languages; do
 
   echo $i
-  curl -sG https://api.github.com/search/repositories --data-urlencode "sort=stars" --data-urlencode "order=desc" --data-urlencode "q=language:${i}" | jq ".items[0,1,2,3,4,5,6,7,8,9,10] | {name, language, html_url, description}" | sed 's/.*": "//g' | grep -v '{' | grep -v '}' | sed 's/",$//g' | paste - - - - >> $tmpfile
-  sleep 5
+  curl -sG https://api.github.com/search/repositories --data-urlencode "sort=stars" --data-urlencode "order=desc" --data-urlencode "q=language:${i}" | jq ".items[0,1,2,3,4,5,6,7,8,9,10] | {description,html_url,language,name}" | sed 's/.*": "//g' | grep -v '{' | grep -v '}' | sed 's/",$//g' | paste - - - - >> $tmpfile
+  sleep 6
 done
 
-grep -vFf $archive $tmpfile
+grep -vFf <(cut -f 3 $archive) $tmpfile | tee -a $archive | awk '{print $0,""}' OFS='\t' | tr '\t' '\n'
 
-grep -vFf $archive $tmpfile | cut -f 3 >> $archive
-
+rm $tmpfile
 
 
 
