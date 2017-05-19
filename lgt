@@ -45,7 +45,7 @@ fi
 
 for i in $languages; do
   echo $i
-  curl -sG https://api.github.com/search/repositories --data-urlencode "sort=stars" --data-urlencode "order=desc" --data-urlencode "q=language:${i}" | jq ".items[0,1,2,3,4,5,6,7,8,9,10] | {description,html_url,language,name}" | sed 's/.*": "//g' | grep -v '{' | grep -v '}' | sed 's/",$//g' | paste - - - - >> $tmpfile
+  curl -sG https://api.github.com/search/repositories --data-urlencode "sort=stars" --data-urlencode "order=desc" --data-urlencode "q=language:${i}" | jq ".items[0,1,2,3,4,5,6,7,8,9,10] | {name,language,html_url,description}" | sed 's/.*": "//g' | grep -v '{' | grep -v '}' | sed 's/",$//g' | paste - - - - >> $tmpfile
   sleep 6
 done
 
